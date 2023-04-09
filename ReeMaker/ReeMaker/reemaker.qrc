@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="ReeMaker">
+    <file>Resources/AllMode.png</file>
+    <file>Resources/Expand.png</file>
+    <file>Resources/Open.png</file>
+    <file>Resources/Save.png</file>
+    <file>Resources/ZoomIn.png</file>
+    <file>Resources/ZoomOut.png</file>
+  </qresource>
+</RCC>
