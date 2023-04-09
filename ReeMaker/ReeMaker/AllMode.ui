@@ -118,22 +118,6 @@
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="checkBox_3">
-      <property name="font">
-       <font>
-        <family>Arial</family>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>.raw</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QCheckBox" name="checkBox_4">
       <property name="font">
        <font>

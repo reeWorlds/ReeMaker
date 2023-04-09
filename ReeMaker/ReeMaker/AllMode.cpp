@@ -56,8 +56,6 @@ AllMode::AllMode(QWidget *parent)
 	connect(ui.pushButton, SIGNAL(clicked()), this, SLOT(chooseIn()));
 	connect(ui.pushButton_2, SIGNAL(clicked()), this, SLOT(chooseOut()));
 	connect(ui.pushButton_4, SIGNAL(clicked()), this, SLOT(apply()));
-
-
 }
 
 AllMode::~AllMode()
@@ -92,18 +90,15 @@ void AllMode::apply()
 	thiss->isAllMode = 1;
 	thiss->isOpen++;
 	int inf = getTypeInf();
-	int png, jpeg, raw, tiff;
+	int png, jpeg, tiff;
 	
 	tiff = inf % 10;
-	inf /= 10;
-	raw = inf % 10;
 	inf /= 10;
 	jpeg = inf % 10;
 	inf /= 10;
 	png = inf % 10;
 
 	
-
 	if (png == 1)
 	{
 		WIN32_FIND_DATAA FindFileData;
@@ -254,57 +249,6 @@ void AllMode::apply()
 		}
 		//hf = FindFirstFileA(  "D:\\VS2013\\ReeMaker\\x64\\Debug\\Filters\\*.dll", &FindFileData);
 	}
-
-	if (raw == 1)
-	{
-		WIN32_FIND_DATAA FindFileData;
-		HANDLE hf;
-		std::string k = a + "/*.RAW";
-		hf = FindFirstFileA((a + "/*.RAW").c_str(), &FindFileData);
-		int d = 0, l = 0;
-		if (hf != INVALID_HANDLE_VALUE)
-		{
-			l++;
-			while (FindNextFileA(hf, &FindFileData))
-			{
-				l++;
-			}
-		}
-
-		hf = FindFirstFileA((a + "/*.RAW").c_str(), &FindFileData);
-
-		if (hf != INVALID_HANDLE_VALUE)
-		{
-			std::string filterName = FindFileData.cFileName;
-			cv::Mat cvImage = cv::imread(a + "/" + filterName, cv::IMREAD_COLOR);
-			thiss->m_img = cvImage;
-			thiss->applyFilters();
-			cv::imwrite(b + "/" + filterName, thiss->m_resImg);
-			d++;
-			ui.label_5->setText(QString::number(d) + " of " + QString::number(l));
-			ui.label_5->update();
-			ui.progressBar->setValue(100.0 / double(l)* double(d));
-			ui.progressBar->update();
-
-			while (FindNextFileA(hf, &FindFileData))
-			{
-				filterName = FindFileData.cFileName;
-				cv::Mat cvImage = cv::imread(a + "/" + filterName, cv::IMREAD_COLOR);
-				thiss->m_img = cvImage;
-				thiss->applyFilters();
-				cv::imwrite(b + "/" + filterName, thiss->m_resImg);
-				d++;
-				ui.label_5->setText(QString::number(d) + " of " + QString::number(l));
-				ui.label_5->update();
-				ui.progressBar->setValue(100.0 / double(l)* double(d));
-				ui.progressBar->update();
-
-			}
-
-		}
-		//hf = FindFirstFileA(  "D:\\VS2013\\ReeMaker\\x64\\Debug\\Filters\\*.dll", &FindFileData);
-	}
-	
 	
 	thiss->isOpen--;
 	thiss->isAllMode = 1;
@@ -340,9 +284,9 @@ QString AllMode::getOut()
 int AllMode::getTypeInf()
 {
 	int inf = 0;
-	if (ui.checkBox->isChecked()){ inf += 1000; }
-	if (ui.checkBox_2->isChecked()){ inf += 100; }
-	if (ui.checkBox_3->isChecked()){ inf += 10; }
+
+	if (ui.checkBox->isChecked()){ inf += 100; }
+	if (ui.checkBox_2->isChecked()){ inf += 10; }
 	if (ui.checkBox_4->isChecked()){ inf += 1; }
 
 	return inf;
@@ -353,11 +297,9 @@ void AllMode::listViewBuild(QString imageFolderName)
 	ui.listWidget->clear();
 
 	int inf = getTypeInf();
-	int png, jpeg, raw, tiff;
+	int png, jpeg, tiff;
 
 	tiff = inf % 10;
-	inf /= 10;
-	raw = inf % 10;
 	inf /= 10;
 	jpeg = inf % 10;
 	inf /= 10;
@@ -485,7 +427,7 @@ void AllMode::listViewBuild(QString imageFolderName)
 	{
 		WIN32_FIND_DATAA FindFileData;
 		HANDLE hf;
-		hf = FindFirstFileA((a + "/*.TIF").c_str(), &FindFileData);
+		hf = FindFirstFileA((a + "/*.TIFF").c_str(), &FindFileData);
 		int d = 0, l = 0;
 		if (hf != INVALID_HANDLE_VALUE)
 		{
@@ -496,64 +438,7 @@ void AllMode::listViewBuild(QString imageFolderName)
 			}
 		}
 
-		hf = FindFirstFileA((a + "/*.TIF").c_str(), &FindFileData);
-
-		if (hf != INVALID_HANDLE_VALUE)
-		{
-			std::string filterName = FindFileData.cFileName;
-			cv::Mat cvImage = cv::imread(a + "/" + filterName, cv::IMREAD_COLOR);
-			cv::Size szw; szw.height = 70; szw.width = 90;
-			cv::resize(cvImage, cvImage, szw);
-			QImage qmImage = cvImageToQImage(cvImage);
-			QString qstr = QString::fromStdString(filterName.substr(0, filterName.length() - 4));
-			QListWidgetItem *item1 = new QListWidgetItem(QIcon(QPixmap::fromImage(qmImage)), qstr, ui.listWidget);
-			ui.listWidget->addItem(item1);
-			ui.listWidget->update();
-			d++;
-			ui.label_5->setText(QString::number(d) + " of " + QString::number(l));
-			ui.label_5->update();
-			ui.progressBar->setValue(100.0 / double(l)* double(d));
-			ui.progressBar->update();
-
-			while (FindNextFileA(hf, &FindFileData))
-			{
-				std::string filterName = FindFileData.cFileName;
-				cv::Mat cvImage = cv::imread(a + "/" + filterName, cv::IMREAD_COLOR);
-				cv::Size szw; szw.height = 70; szw.width = 90;
-				cv::resize(cvImage, cvImage, szw);
-				QImage qmImage = cvImageToQImage(cvImage);
-				QString qstr = QString::fromStdString(filterName.substr(0, filterName.length() - 4));
-				QListWidgetItem *item2 = new QListWidgetItem(QIcon(QPixmap::fromImage(qmImage)), qstr, ui.listWidget);
-				ui.listWidget->addItem(item2);
-				ui.listWidget->update();
-				d++;
-				ui.label_5->setText(QString::number(d) + " of " + QString::number(l));
-				ui.label_5->update();
-				ui.progressBar->setValue(100.0 / double(l)* double(d));
-				ui.progressBar->update();
-
-			}
-
-		}
-		//hf = FindFirstFileA(  "D:\\VS2013\\ReeMaker\\x64\\Debug\\Filters\\*.dll", &FindFileData);
-	}
-
-	if (raw == 1)
-	{
-		WIN32_FIND_DATAA FindFileData;
-		HANDLE hf;
-		hf = FindFirstFileA((a + "/*.RAW").c_str(), &FindFileData);
-		int d = 0, l = 0;
-		if (hf != INVALID_HANDLE_VALUE)
-		{
-			l++;
-			while (FindNextFileA(hf, &FindFileData))
-			{
-				l++;
-			}
-		}
-
-		hf = FindFirstFileA((a + "/*.RAW").c_str(), &FindFileData);
+		hf = FindFirstFileA((a + "/*.TIFF").c_str(), &FindFileData);
 
 		if (hf != INVALID_HANDLE_VALUE)
 		{

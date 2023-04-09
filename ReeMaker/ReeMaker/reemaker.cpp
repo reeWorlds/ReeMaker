@@ -195,5 +195,11 @@ void ReeMaker::applyFilters()
 
 void ReeMaker::save()
 {
-	cv::imwrite("../../icon.png", m_resImg);
+	QString imageFileName = QFileDialog::getSaveFileName(this, "Save Image", QString(), "Image Files (*.*)");
+	if (imageFileName.isEmpty()) { return; }
+
+	if (m_resImg.empty()) { return; }
+	if (imageFileName.isEmpty()) { return; }
+
+	cv::imwrite(imageFileName.toStdString(), m_resImg);
 }
